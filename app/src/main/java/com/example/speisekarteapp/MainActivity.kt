@@ -10,8 +10,18 @@ import kotlin.math.round
 /**
  * Main Activity, dient als Einstiegspunkt für die App
  */
-val TAG = "MainActivity"
+private const val TAG = "MainActivity"
+private const val KEY_COUNTER = "myCounter"
+private const val DECK_COUNTER = "myDeck"
+private const val TRUCK_COUNTER = "myTruck"
+private const val WHEELS_COUNTER = "myWhell"
+private const val TOTAL_COUNTER = "myBill"
+
+
+
 class MainActivity : AppCompatActivity() {
+
+    private var counter = 0
 
     /* -------------------- Klassen Variablen -------------------- */
     private var bill: Float = 0f
@@ -25,9 +35,27 @@ class MainActivity : AppCompatActivity() {
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Log.e(TAG, "Lifecycle onCreate")
+
+        if (savedInstanceState != null){
+            bill = savedInstanceState.getFloat(TOTAL_COUNTER, 0f)
+            drink1.count = savedInstanceState.getInt(DECK_COUNTER, 0)
+            drink2.count = savedInstanceState.getInt(TRUCK_COUNTER,0)
+            drink3.count = savedInstanceState.getInt(WHEELS_COUNTER,0)
+
+        }
 
         // Lege hier die Binding Variable an
-        val binding: ActivityMainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+        val binding: ActivityMainBinding =
+            DataBindingUtil.setContentView(this, R.layout.activity_main)
+
+
+
+
+
+
+
+
 
         // Setze hier die Namen, Preise und Count in der View über die binding Variable
         binding.drink1Name.text = drink1.name
@@ -41,7 +69,7 @@ class MainActivity : AppCompatActivity() {
         binding.drink1Count.text = drink1.count.toString()
         binding.drink2Count.text = drink2.count.toString()
         binding.drink3Count.text = drink3.count.toString()
-        binding.totalPrice.text = "0.0"
+        binding.totalPrice.text = bill.toString()
 
         // implementiere einen onClicklistener für das Kaffee Icon
         binding.drink1Button.setOnClickListener {
@@ -104,4 +132,50 @@ class MainActivity : AppCompatActivity() {
             bill = round(bill * 100) / 100
         }
     }
+
+
+    override fun onStart() {
+        super.onStart()
+        Log.e(TAG, "Lifecycle onStart")
+    }
+
+    override fun onRestart() {
+        super.onRestart()
+        Log.e(TAG, "Lifecycle onRestart")
+    }
+
+    override fun onResume() {
+        super.onResume()
+        Log.e(TAG, "Lifecycle onResume")
+    }
+
+    override fun onPause() {
+        super.onPause()
+        Log.e(TAG, "Lifecycle onPause")
+    }
+
+    override fun onStop() {
+        super.onStop()
+        Log.d(TAG, "Lifecycle onStop")
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.e(TAG, "Lifecycle onDestroy")
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        Log.d(TAG,"Lifecycle onSaveInstanceState called")
+
+        outState.putFloat(TOTAL_COUNTER, bill )
+        outState.putInt(DECK_COUNTER, drink1.count)
+        outState.putInt(TRUCK_COUNTER, drink2.count )
+        outState.putInt(WHEELS_COUNTER, drink3.count )
+    }
+
+
 }
+
+
+
